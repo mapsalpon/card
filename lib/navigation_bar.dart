@@ -23,10 +23,10 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
   void openPage(int index) {
     switch(index) {
       case 0:
-        Navigator.pushReplacementNamed(context, '/');
+        Navigator.restorablePushReplacementNamed(context, '/');
         break;
       case 1:
-        Navigator.pushReplacementNamed(context, '/second');
+        Navigator.restorablePushReplacementNamed(context, '/second');
         break;
     };
   }

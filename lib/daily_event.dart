@@ -68,17 +68,91 @@ class _MonthlyAwardState extends State<MonthlyAward> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primaryContainer,
         ),
-        child: Container(
+        child: Stack(
           alignment: Alignment.bottomCenter,
-          color: Colors.transparent,
-          width: 150,
-          height: 250,
-          child: Image(image: AssetImage('asset_bundle/images/award-cup.png')),
+          children: [
+            Container(
+              width: 300,
+              height: 250,
+              color: Colors.grey,
+              child: const AwardAnimatedParticles(),
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              color: Colors.transparent,
+              width: 150,
+              height: 250,
+              child: Image(image: AssetImage('asset_bundle/images/award-cup.png'), color: Colors.black54,),
+          ),
+          ]
         ),
       ),
     );
   }
 }
+
+class AwardAnimatedParticles extends StatefulWidget {
+  const AwardAnimatedParticles({Key? key}) : super(key: key);
+
+  @override
+  State<AwardAnimatedParticles> createState() => _AwardAnimatedParticlesState();
+}
+
+class _AwardAnimatedParticlesState extends State<AwardAnimatedParticles> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late final Animation<double> _yAxisAlignment;
+  late final Animation<double> _xAxisAlignment;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3), reverseDuration: const Duration(seconds: 3))..repeat(reverse: true,);
+
+    _xAxisAlignment = Tween<double>(
+      begin: -1,
+      end: 1,
+    ).animate(_controller);
+
+    _yAxisAlignment = Tween<double>(
+      begin: -pi,
+      end: pi,
+    ).animate(_controller);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    double yAxisAlignmentValue = cos(_yAxisAlignment.value);
+
+    return SizedBox(
+      width: 300,
+      height: 200,
+      child: AnimatedBuilder(
+        animation: _xAxisAlignment,
+        builder: (context, child) {
+          return Align(
+          alignment: Alignment(_xAxisAlignment.value, _yAxisAlignment.value),
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.orangeAccent,
+              shape: BoxShape.circle,
+            ),
+          ),
+        );
+        }
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
 
 class CalendarOfEvent extends StatefulWidget {
   const CalendarOfEvent({Key? key}) : super(key: key);
