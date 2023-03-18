@@ -73,9 +73,22 @@ class _MonthlyAwardState extends State<MonthlyAward> {
           children: [
             Container(
               width: 300,
-              height: 250,
-              color: Colors.grey,
-              child: const AwardAnimatedParticles(),
+              height: 300,
+              color: Colors.transparent,
+              child: Stack(
+                alignment: Alignment.center,
+                  children: const [
+                    AwardAnimatedParticles(particleSize: 50, secondsPerLoop: 44, radius: 100,),
+                    AwardAnimatedParticles(particleSize: 40, secondsPerLoop: 40, radius: 124,),
+                    AwardAnimatedParticles(particleSize: 34, secondsPerLoop: 34, radius: 190,),
+
+                    AwardAnimatedParticles(particleSize: 24, secondsPerLoop: 26, radius: 240,),
+                    AwardAnimatedParticles(particleSize: 20, secondsPerLoop: 24, radius: 210,),
+                    AwardAnimatedParticles(particleSize: 16, secondsPerLoop: 20, radius: 170,),
+
+                    AwardAnimatedParticles(particleSize: 3, secondsPerLoop: 14, radius: 250,),
+                  ]
+              ),
             ),
             Container(
               alignment: Alignment.bottomCenter,
@@ -92,7 +105,13 @@ class _MonthlyAwardState extends State<MonthlyAward> {
 }
 
 class AwardAnimatedParticles extends StatefulWidget {
-  const AwardAnimatedParticles({Key? key}) : super(key: key);
+  const AwardAnimatedParticles({Key? key, this.particleSize = 20, this.secondsPerLoop = 10, this.radius}) : super(key: key);
+
+  final double particleSize;
+  final int secondsPerLoop;
+
+  ///Если значение не указано - область занимает размер своего родителя
+  final double? radius;
 
   @override
   State<AwardAnimatedParticles> createState() => _AwardAnimatedParticlesState();
@@ -100,49 +119,49 @@ class AwardAnimatedParticles extends StatefulWidget {
 
 class _AwardAnimatedParticlesState extends State<AwardAnimatedParticles> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late final Animation<double> _yAxisAlignment;
-  late final Animation<double> _xAxisAlignment;
+  late final Animation<double> _coordinatesHandler;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(seconds: 3), reverseDuration: const Duration(seconds: 3))..repeat(reverse: true,);
+    _controller = AnimationController(vsync: this, duration: Duration(seconds: widget.secondsPerLoop))..repeat();
 
-    _xAxisAlignment = Tween<double>(
-      begin: -1,
-      end: 1,
-    ).animate(_controller);
-
-    _yAxisAlignment = Tween<double>(
+    _coordinatesHandler = Tween<double>(
       begin: -pi,
       end: pi,
     ).animate(_controller);
   }
 
+  //cos2t+sin2t=1.
+
   @override
   Widget build(BuildContext context) {
+    double randomShift = Random().nextDouble() * pi;
+    double particleOpacity = Random().nextDouble();
 
-    double yAxisAlignmentValue = cos(_yAxisAlignment.value);
-
-    return SizedBox(
-      width: 300,
-      height: 200,
-      child: AnimatedBuilder(
-        animation: _xAxisAlignment,
-        builder: (context, child) {
-          return Align(
-          alignment: Alignment(_xAxisAlignment.value, _yAxisAlignment.value),
+    return AnimatedBuilder(
+      animation: _coordinatesHandler,
+      builder: (context, child) {
+        return SizedBox(
+          width: widget.radius,
+          height: widget.radius,
+          child: Align(
+          alignment: Alignment(cos(_coordinatesHandler.value + randomShift), sin(_coordinatesHandler.value + randomShift)),
           child: Container(
-            width: 50,
-            height: 50,
+
+            width: widget.particleSize,
+            height: widget.particleSize,
             decoration: BoxDecoration(
-              color: Colors.orangeAccent,
+              color: Theme.of(context).colorScheme.primary.withOpacity(particleOpacity),
               shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(blurRadius: 30, color: Theme.of(context).colorScheme.primary, spreadRadius: 10),
+              ],
             ),
           ),
-        );
-        }
       ),
+        );
+      }
     );
   }
 
