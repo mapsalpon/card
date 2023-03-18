@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'color_schemes.g.dart';
 import 'constants.dart';
+import 'package:provider/provider.dart';
 
 class MainNavigationBar extends StatefulWidget {
   const MainNavigationBar({Key? key}) : super(key: key);
@@ -9,26 +10,31 @@ class MainNavigationBar extends StatefulWidget {
   State<MainNavigationBar> createState() => _MainNavigationBarState();
 }
 
-class _MainNavigationBarState extends State<MainNavigationBar> {
-
+class CurrentPage extends ChangeNotifier {
   int currentIndex = 0;
 
-  void goToRoute(int route) {
-    setState(() {
-      currentIndex = route;
-    });
-    switch(route) {
+  void changePage(int route) {
+    currentIndex = route;
+  }
+}
+
+class _MainNavigationBarState extends State<MainNavigationBar> {
+
+  void openPage(int index) {
+    switch(index) {
       case 0:
-        Navigator.pushNamed(context, '/');
+        Navigator.pushReplacementNamed(context, '/');
         break;
       case 1:
-        Navigator.pushNamed(context, '/second');
+        Navigator.pushReplacementNamed(context, '/second');
         break;
     };
   }
 
   @override
   Widget build(BuildContext context) {
+    var pageNumber = Provider.of<CurrentPage>(context);
+
     return Theme(
       data: Theme.of(context).copyWith(
         navigationBarTheme: NavigationBarThemeData(
@@ -38,8 +44,11 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
         ),
       ),
       child: NavigationBar(
-        selectedIndex: currentIndex,
-        onDestinationSelected: goToRoute,
+        selectedIndex: pageNumber.currentIndex,
+        onDestinationSelected: (int newIndex){
+          pageNumber.changePage(newIndex);
+          openPage(newIndex);
+        },
         destinations: const [
           NavigationDestination(
               icon: Icon(Icons.home_filled), label: 'Главная'),
