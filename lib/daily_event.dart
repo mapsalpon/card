@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'constants.dart';
@@ -15,9 +16,12 @@ class _DailyEventPageState extends State<DailyEventPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+
         centerTitle: true,
         title: Text(
           'Ежедневные испытания',
@@ -39,7 +43,7 @@ class _DailyEventPageState extends State<DailyEventPage> {
           ),
         ],
       ),
-      bottomNavigationBar: MainNavigationBar(),
+      bottomNavigationBar: const MainNavigationBar(),
       body: Column(
         children: const <Widget>[
           MonthlyAward(),
@@ -62,40 +66,73 @@ class _MonthlyAwardState extends State<MonthlyAward> {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      flex: 8,
+      flex: 9,
       child: Container(
         alignment: Alignment.bottomCenter,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
+          color: Theme.of(context).colorScheme.secondaryContainer,
         ),
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
             Container(
-              width: 300,
+              width: screenWidth,
               height: 300,
-              color: Colors.transparent,
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+                boxShadow: [
+                  BoxShadow(color: Colors.black87, offset: Offset(0, 288), blurRadius: 50, spreadRadius: 10),
+                ],
+              ),
               child: Stack(
                 alignment: Alignment.center,
-                  children: const [
-                    AwardAnimatedParticles(particleSize: 50, secondsPerLoop: 44, radius: 100,),
-                    AwardAnimatedParticles(particleSize: 40, secondsPerLoop: 40, radius: 124,),
-                    AwardAnimatedParticles(particleSize: 34, secondsPerLoop: 34, radius: 190,),
+                  children: ((){
+                    List<Widget> particleList = [
+                      const AnimatedParticle(particleSize: 5, secondsPerLoop: 14, radius: 250,),
+                      const AnimatedParticle(particleSize: 4, secondsPerLoop: 15, radius: 250,),
+                      const AnimatedParticle(particleSize: 24, secondsPerLoop: 26, radius: 240,),
+                    ];
 
-                    AwardAnimatedParticles(particleSize: 24, secondsPerLoop: 26, radius: 240,),
-                    AwardAnimatedParticles(particleSize: 20, secondsPerLoop: 24, radius: 210,),
-                    AwardAnimatedParticles(particleSize: 16, secondsPerLoop: 20, radius: 170,),
+                    for (var i = 1; i <= 12; i++) {
+                      particleList.add(
+                        AnimatedParticle(
+                          particleSize: Random().nextInt(50) + 3,
+                          secondsPerLoop: Random().nextInt(30) + 30,
+                          radius: Random().nextInt(140) + 100,
+                        )
+                      );
+                    };
 
-                    AwardAnimatedParticles(particleSize: 3, secondsPerLoop: 14, radius: 250,),
-                  ]
+                    return particleList;
+                    //   [
+                    //   AnimatedParticle(particleSize: 50, secondsPerLoop: 44, radius: 100,),
+                    //   AnimatedParticle(particleSize: 40, secondsPerLoop: 40, radius: 124,),
+                    //   AnimatedParticle(particleSize: 34, secondsPerLoop: 34, radius: 190,),
+                    //
+                    //   AnimatedParticle(particleSize: 24, secondsPerLoop: 26, radius: 240,),
+                    //   AnimatedParticle(particleSize: 20, secondsPerLoop: 24, radius: 210,),
+                    //   AnimatedParticle(particleSize: 16, secondsPerLoop: 20, radius: 170,),
+                    //
+                    //   AnimatedParticle(particleSize: 24, secondsPerLoop: 26, radius: 240,),
+                    //   AnimatedParticle(particleSize: 20, secondsPerLoop: 24, radius: 210,),
+                    //   AnimatedParticle(particleSize: 16, secondsPerLoop: 20, radius: 170,),
+                    //   AnimatedParticle(particleSize: 10, secondsPerLoop: 20, radius: 150,),
+                    //   AnimatedParticle(particleSize: 11, secondsPerLoop: 20, radius: 130,),
+                    //
+                    //   AnimatedParticle(particleSize: 3, secondsPerLoop: 14, radius: 250,),
+                    //   AnimatedParticle(particleSize: 5, secondsPerLoop: 15, radius: 250,),
+                    //   AnimatedParticle(particleSize: 4, secondsPerLoop: 15, radius: 250,),
+                    // ];
+                  }())
               ),
             ),
             Container(
-              alignment: Alignment.bottomCenter,
-              color: Colors.transparent,
-              width: 150,
               height: 250,
-              child: Image(image: AssetImage('asset_bundle/images/award-cup.png'), color: Colors.black54,),
+              alignment: Alignment.bottomCenter,
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: Image(image: AssetImage('asset_bundle/images/tree-leafless.png'), color: Colors.black.withOpacity(0.8), fit: BoxFit.fitHeight, height: 500,),
           ),
           ]
         ),
@@ -104,8 +141,8 @@ class _MonthlyAwardState extends State<MonthlyAward> {
   }
 }
 
-class AwardAnimatedParticles extends StatefulWidget {
-  const AwardAnimatedParticles({Key? key, this.particleSize = 20, this.secondsPerLoop = 10, this.radius}) : super(key: key);
+class AnimatedParticle extends StatefulWidget {
+  const AnimatedParticle({Key? key, this.particleSize = 20, this.secondsPerLoop = 10, this.radius}) : super(key: key);
 
   final double particleSize;
   final int secondsPerLoop;
@@ -114,10 +151,10 @@ class AwardAnimatedParticles extends StatefulWidget {
   final double? radius;
 
   @override
-  State<AwardAnimatedParticles> createState() => _AwardAnimatedParticlesState();
+  State<AnimatedParticle> createState() => _AnimatedParticleState();
 }
 
-class _AwardAnimatedParticlesState extends State<AwardAnimatedParticles> with SingleTickerProviderStateMixin {
+class _AnimatedParticleState extends State<AnimatedParticle> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late final Animation<double> _coordinatesHandler;
 
@@ -136,7 +173,7 @@ class _AwardAnimatedParticlesState extends State<AwardAnimatedParticles> with Si
 
   @override
   Widget build(BuildContext context) {
-    double randomShift = Random().nextDouble() * pi;
+    double randomShift = Random().nextDouble() * 2 * pi;
     double particleOpacity = Random().nextDouble();
 
     return AnimatedBuilder(
@@ -155,7 +192,7 @@ class _AwardAnimatedParticlesState extends State<AwardAnimatedParticles> with Si
               color: Theme.of(context).colorScheme.primary.withOpacity(particleOpacity),
               shape: BoxShape.circle,
               boxShadow: [
-                BoxShadow(blurRadius: 30, color: Theme.of(context).colorScheme.primary, spreadRadius: 10),
+                BoxShadow(blurRadius: 40, color: Theme.of(context).colorScheme.primary, spreadRadius: 12),
               ],
             ),
           ),
@@ -184,10 +221,10 @@ class _CalendarOfEventState extends State<CalendarOfEvent> {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      flex: 9,
+      flex: 8,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surface, //surface
         ),
         child: const CalendarScaffold(),
       ),
@@ -232,7 +269,7 @@ class _CalendarScaffoldState extends State<CalendarScaffold> {
   Widget build(BuildContext context) {
     return SizedBox(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+        padding: const EdgeInsets.only(left: 36, right: 36, top: 18),
         child: Column(
           children: [
             Row(
@@ -272,19 +309,22 @@ class _CalendarScaffoldState extends State<CalendarScaffold> {
               ],
             ),
             SizedBox(
-              height: screenHeight / 4.4,
+              height: screenHeight/3.4,
               child: GridView(
+                physics: const ClampingScrollPhysics(),
+                clipBehavior: Clip.antiAlias,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 7,
                     crossAxisSpacing: 14,
-                    mainAxisSpacing: 14),
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                    mainAxisSpacing: 14,
+                ),
+                padding: const EdgeInsets.only(top: 8),
                 children: (() {
                   List<EventPreview> debugList = [];
-                  for (var e = 0; e < List.filled(Random().nextInt(6), null).length; e++) {
+                  for (var e = 0; e < List.filled(Random().nextInt(7), null).length; e++) {
                     debugList.add(EventPreview(isDone: null,));
                   }
-                  for (var i = 1; i < 31; i++) {
+                  for (var i = 1; i <= 31; i++) {
                     debugList.add(EventPreview(isDone: ([true, false]..shuffle()).first, day: i,));
                   }
                   
@@ -322,10 +362,10 @@ class _EventPreviewState extends State<EventPreview> {
         child: (() {
           switch (widget.isDone) {
             case null:
-              return SizedBox();
+              return const SizedBox();
             case true:
               return Container(
-                color: Colors.purple,
+                color: Theme.of(context).colorScheme.secondaryContainer,
                 width: 100,
                 height: 100,
               );
@@ -353,7 +393,7 @@ class PlayEventButton extends StatelessWidget {
         minWidth: screenWidth,
       ),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 24, right: 24, left: 24),
+        padding: const EdgeInsets.only(bottom: 6, right: 24, left: 24),
         child: ElevatedButton(
           onPressed: () {},
           style: ButtonStyle(

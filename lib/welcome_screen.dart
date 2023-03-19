@@ -67,7 +67,7 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: MainNavigationBar(),
+      bottomNavigationBar: const MainNavigationBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
