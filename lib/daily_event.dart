@@ -104,25 +104,6 @@ class _MonthlyAwardState extends State<MonthlyAward> {
                     };
 
                     return particleList;
-                    //   [
-                    //   AnimatedParticle(particleSize: 50, secondsPerLoop: 44, radius: 100,),
-                    //   AnimatedParticle(particleSize: 40, secondsPerLoop: 40, radius: 124,),
-                    //   AnimatedParticle(particleSize: 34, secondsPerLoop: 34, radius: 190,),
-                    //
-                    //   AnimatedParticle(particleSize: 24, secondsPerLoop: 26, radius: 240,),
-                    //   AnimatedParticle(particleSize: 20, secondsPerLoop: 24, radius: 210,),
-                    //   AnimatedParticle(particleSize: 16, secondsPerLoop: 20, radius: 170,),
-                    //
-                    //   AnimatedParticle(particleSize: 24, secondsPerLoop: 26, radius: 240,),
-                    //   AnimatedParticle(particleSize: 20, secondsPerLoop: 24, radius: 210,),
-                    //   AnimatedParticle(particleSize: 16, secondsPerLoop: 20, radius: 170,),
-                    //   AnimatedParticle(particleSize: 10, secondsPerLoop: 20, radius: 150,),
-                    //   AnimatedParticle(particleSize: 11, secondsPerLoop: 20, radius: 130,),
-                    //
-                    //   AnimatedParticle(particleSize: 3, secondsPerLoop: 14, radius: 250,),
-                    //   AnimatedParticle(particleSize: 5, secondsPerLoop: 15, radius: 250,),
-                    //   AnimatedParticle(particleSize: 4, secondsPerLoop: 15, radius: 250,),
-                    // ];
                   }())
               ),
             ),
@@ -169,12 +150,11 @@ class _AnimatedParticleState extends State<AnimatedParticle> with SingleTickerPr
     ).animate(_controller);
   }
 
-  //cos2t+sin2t=1.
-
   @override
   Widget build(BuildContext context) {
     double randomShift = Random().nextDouble() * 2 * pi;
     double particleOpacity = Random().nextDouble();
+
 
     return AnimatedBuilder(
       animation: _coordinatesHandler,
@@ -185,7 +165,6 @@ class _AnimatedParticleState extends State<AnimatedParticle> with SingleTickerPr
           child: Align(
           alignment: Alignment(cos(_coordinatesHandler.value + randomShift), sin(_coordinatesHandler.value + randomShift)),
           child: Container(
-
             width: widget.particleSize,
             height: widget.particleSize,
             decoration: BoxDecoration(
@@ -224,7 +203,7 @@ class _CalendarOfEventState extends State<CalendarOfEvent> {
       flex: 8,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface, //surface
+          color: Theme.of(context).colorScheme.surface,
         ),
         child: const CalendarScaffold(),
       ),
@@ -392,7 +371,8 @@ class PlayEventButton extends StatelessWidget {
       constraints: BoxConstraints(
         minWidth: screenWidth,
       ),
-      child: Padding(
+      child: Container(
+        color: Theme.of(context).colorScheme.surface,
         padding: const EdgeInsets.only(bottom: 6, right: 24, left: 24),
         child: ElevatedButton(
           onPressed: () {},

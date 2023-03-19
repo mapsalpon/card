@@ -3,19 +3,19 @@ import 'color_schemes.g.dart';
 import 'constants.dart';
 import 'package:provider/provider.dart';
 
-class MainNavigationBar extends StatefulWidget {
-  const MainNavigationBar({Key? key}) : super(key: key);
-
-  @override
-  State<MainNavigationBar> createState() => _MainNavigationBarState();
-}
-
 class CurrentPage extends ChangeNotifier {
   int currentIndex = 0;
 
   void changePage(int route) {
     currentIndex = route;
   }
+}
+
+class MainNavigationBar extends StatefulWidget {
+  const MainNavigationBar({Key? key}) : super(key: key);
+
+  @override
+  State<MainNavigationBar> createState() => _MainNavigationBarState();
 }
 
 class _MainNavigationBarState extends State<MainNavigationBar> {
@@ -44,6 +44,7 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
         ),
       ),
       child: NavigationBar(
+        height: 64,
         selectedIndex: pageNumber.currentIndex,
         onDestinationSelected: (int newIndex){
           pageNumber.changePage(newIndex);
@@ -62,3 +63,6 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
     );
   }
 }
+
+
+
