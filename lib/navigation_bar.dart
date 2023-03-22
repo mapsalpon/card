@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'color_schemes.g.dart';
-import 'constants.dart';
 import 'package:provider/provider.dart';
 
 class CurrentPage extends ChangeNotifier {

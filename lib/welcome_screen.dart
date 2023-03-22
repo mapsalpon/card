@@ -3,6 +3,8 @@ import 'color_schemes.g.dart';
 import 'constants.dart';
 import 'daily_event.dart';
 import 'navigation_bar.dart';
+import 'time.dart';
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -44,6 +46,14 @@ class _WelcomePageState extends State<WelcomePage> {
         Navigator.pushNamed(context, '/second');
         break;
     };
+  }
+
+  @override
+  void initState() {
+    print(
+      [MonthTime.now().monthNumber, MonthTime.now().amountOfDays, MonthTime.now().firstWeekDay]
+    );
+    super.initState();
   }
 
   @override
