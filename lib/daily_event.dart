@@ -1,9 +1,10 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:taro/time.dart';
 import 'constants.dart';
 import 'navigation_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class DailyEventPage extends StatefulWidget {
   const DailyEventPage({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _DailyEventPageState extends State<DailyEventPage> {
 
         centerTitle: true,
         title: Text(
-          'Ежедневные испытания',
+          'Ежедневные расклады',
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 18,
@@ -197,6 +198,15 @@ class CalendarOfEvent extends StatefulWidget {
 }
 
 class _CalendarOfEventState extends State<CalendarOfEvent> {
+  final int nowMonth = MonthTime.now().monthNumber;
+  final List<int> months = [];
+
+  @override
+  void initState() {
+    months.addAll(List.generate(13, (index) => nowMonth - index));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -205,21 +215,29 @@ class _CalendarOfEventState extends State<CalendarOfEvent> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
         ),
-        child: const CalendarScaffold(),
+        child: PageView(
+          scrollDirection: Axis.horizontal,
+          pageSnapping: true,
+          reverse: true,
+          physics: const ClampingScrollPhysics(),
+          children: months.map((e) => CalendarScaffold(monthTime: MonthTime.fromMonthNumber(month: e),)).toList(),
+        ),
       ),
     );
   }
 }
 
 class CalendarScaffold extends StatefulWidget {
-  const CalendarScaffold({Key? key}) : super(key: key);
+  const CalendarScaffold({Key? key, required this.monthTime}) : super(key: key);
+
+  final MonthTime monthTime;
 
   @override
   State<CalendarScaffold> createState() => _CalendarScaffoldState();
 }
 
 class _CalendarScaffoldState extends State<CalendarScaffold> {
-  TextStyle statisticTextStyle = const TextStyle(
+  final TextStyle _headerTextStyle = const TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.bold,
     letterSpacing: 1,
@@ -237,11 +255,24 @@ class _CalendarScaffoldState extends State<CalendarScaffold> {
       width: screenWidth / 12,
       child: Text(
         dayName,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.w600,
         ),
       ),
     );
+  }
+
+  List<EventPreview> daysList = [];
+
+  @override
+  void initState() {
+    for (var e = 0; e < List.filled(widget.monthTime.firstWeekDay - 1, null).length; e++) {
+      daysList.add(EventPreview(isDone: null,));
+    }
+    for (var i = 1; i <= widget.monthTime.amountOfDays; i++) {
+      daysList.add(EventPreview(isDone: ([true, false]..shuffle()).first, day: i,));
+    }
+    super.initState();
   }
 
   @override
@@ -255,18 +286,18 @@ class _CalendarScaffoldState extends State<CalendarScaffold> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Март 2023',
-                  style: statisticTextStyle,
+                  '${widget.monthTime.monthAsWord} ${widget.monthTime.year}',
+                  style: _headerTextStyle,
                 ),
                 Row(
                   children: [
-                    const Icon(Icons.image_outlined),
+                    const Icon(FontAwesomeIcons.starHalfStroke, size: 14),
                     const SizedBox(
                       width: 8,
                     ),
                     Text(
-                      '15/31',
-                      style: statisticTextStyle,
+                      '15/${widget.monthTime.amountOfDays}',
+                      style: _headerTextStyle,
                     ),
                   ],
                 ),
@@ -288,6 +319,7 @@ class _CalendarScaffoldState extends State<CalendarScaffold> {
               ],
             ),
             SizedBox(
+              // height: screenHeight/10,
               height: screenHeight/3.4,
               child: GridView(
                 physics: const ClampingScrollPhysics(),
@@ -298,17 +330,7 @@ class _CalendarScaffoldState extends State<CalendarScaffold> {
                     mainAxisSpacing: 14,
                 ),
                 padding: const EdgeInsets.only(top: 8),
-                children: (() {
-                  List<EventPreview> debugList = [];
-                  for (var e = 0; e < List.filled(Random().nextInt(7), null).length; e++) {
-                    debugList.add(EventPreview(isDone: null,));
-                  }
-                  for (var i = 1; i <= 31; i++) {
-                    debugList.add(EventPreview(isDone: ([true, false]..shuffle()).first, day: i,));
-                  }
-                  
-                  return debugList;
-                }()),
+                children: daysList  ,
               ),
             ),
           ],
@@ -362,6 +384,8 @@ class _EventPreviewState extends State<EventPreview> {
   }
 }
 
+
+
 class PlayEventButton extends StatelessWidget {
   const PlayEventButton({Key? key}) : super(key: key);
 
@@ -385,7 +409,7 @@ class PlayEventButton extends StatelessWidget {
                 Theme.of(context).colorScheme.primaryContainer),
           ),
           child: const Text(
-            'Играть',
+            'Начать',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,

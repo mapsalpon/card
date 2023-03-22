@@ -3,7 +3,6 @@ import 'color_schemes.g.dart';
 import 'constants.dart';
 import 'daily_event.dart';
 import 'navigation_bar.dart';
-import 'time.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -49,19 +48,6 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   @override
-  void initState() {
-    print(
-      // [MonthTime.now().monthNumber, MonthTime.now().amountOfDays, MonthTime.now().firstWeekDay]
-      [
-        MonthTime.fromMonthNumber(month: 1),
-        MonthTime.fromMonthNumber(month: 2),
-        MonthTime.fromMonthNumber(month: 3),
-      ]
-    );
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -70,11 +56,6 @@ class _WelcomePageState extends State<WelcomePage> {
           color: Theme.of(context).colorScheme.secondary,
         ),
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.stars_rounded),
-            splashRadius: 0.1,
-          ),
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.settings_outlined),
@@ -141,7 +122,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     shadowColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.primaryContainer),
                   ),
                   child: const Text(
-                    'Уровень 2',
+                    'Новый расклад',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
