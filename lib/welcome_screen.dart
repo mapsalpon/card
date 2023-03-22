@@ -51,7 +51,12 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     print(
-      [MonthTime.now().monthNumber, MonthTime.now().amountOfDays, MonthTime.now().firstWeekDay]
+      // [MonthTime.now().monthNumber, MonthTime.now().amountOfDays, MonthTime.now().firstWeekDay]
+      [
+        MonthTime.fromMonthNumber(month: 1),
+        MonthTime.fromMonthNumber(month: 2),
+        MonthTime.fromMonthNumber(month: 3),
+      ]
     );
     super.initState();
   }
