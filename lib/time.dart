@@ -1,7 +1,22 @@
+import 'package:intl/intl.dart';
+import 'package:taro/language_translate.dart';
+
 class MonthTime {
-  int? monthNumber;
-  int? firstWeekDay;
-  int? amountOfDays;
+  late final int monthNumber;
+  late final int firstWeekDay;
+  late final int amountOfDays;
+
+  String get monthAsWord {
+    var monthWord = DateFormat.MMMM().format(DateTime(2001, monthNumber));
+
+    monthWord = Language().monthEngToRus(monthWord);
+
+    return monthWord;
+  }
+
+  int? get year {
+    return DateTime(DateTime.now().year, monthNumber).year;
+  }
 
   MonthTime.now() {
     var timeNow = DateTime.now();
