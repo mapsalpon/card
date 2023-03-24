@@ -26,6 +26,9 @@ class _MainNavigationBarState extends State<MainNavigationBar> {
       case 1:
         Navigator.restorablePushReplacementNamed(context, '/second');
         break;
+      case 2:
+        Navigator.restorablePushReplacementNamed(context, '/third');
+        break;
     };
   }
 

@@ -385,7 +385,6 @@ class _EventPreviewState extends State<EventPreview> {
 }
 
 
-
 class PlayEventButton extends StatelessWidget {
   const PlayEventButton({Key? key}) : super(key: key);
 

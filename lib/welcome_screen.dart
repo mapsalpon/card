@@ -3,6 +3,7 @@ import 'color_schemes.g.dart';
 import 'constants.dart';
 import 'daily_event.dart';
 import 'navigation_bar.dart';
+import 'session_screen.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const WelcomePage(),
         '/second': (context) => const DailyEventPage(),
+        '/third': (context) => const SessionPage(),
       },
     );
   }
@@ -35,17 +37,6 @@ class WelcomePage extends StatefulWidget {
 class _WelcomePageState extends State<WelcomePage> {
   final eventCardWidth = screenWidth / 2 - 16;
   late final eventCardHeight = eventCardWidth * pixelRatio / 2;
-
-  void goToRoute(int route) {
-    switch(route) {
-      case 0:
-        Navigator.pushNamed(context, '/');
-        break;
-      case 1:
-        Navigator.pushNamed(context, '/second');
-        break;
-    };
-  }
 
   @override
   Widget build(BuildContext context) {
