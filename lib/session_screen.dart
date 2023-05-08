@@ -56,45 +56,78 @@ class SessionBody extends StatefulWidget {
   State<SessionBody> createState() => _SessionBodyState();
 }
 
+class CellLine {
+  bool show = true;
+  int length = 1;
+  CellLine(this.show, this.length);
+}
+
+
+var testScheme = [
+  [
+    CellLine(true, 1),
+    CellLine(false, 2),
+    CellLine(true, 1),
+  ],
+  [
+    CellLine(true, 4),
+  ],
+  [
+    CellLine(true, 1),
+    CellLine(false, 2),
+    CellLine(true, 1),
+  ],
+  [
+    CellLine(true, 4),
+  ],
+  [
+    CellLine(false, 1),
+    CellLine(true, 2),
+  ],
+];
+
 class _SessionBodyState extends State<SessionBody> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Container(
-          width: screenWidth/2,
-          height: MySize.cardHeight,
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // DraggableCard(thisCard: CardEntity(isOpen: true,)),
-              // DraggableCard(thisCard: CardEntity(isOpen: true,)),
-              DraggableCard(thisCard: CardEntity(isOpen: false,)),
-            ],
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: screenWidth,
+            height: MySize.cardHeight,
+            color: Colors.transparent,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                DraggableCard(thisCard: CardEntity(isOpen: false,)),
+              ],
+            ),
           ),
-        ),
-        Container(
-          width: screenWidth,
-          alignment: Alignment.topCenter,
-          child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: (() {
-              var listOfWidgets = <Widget>[];
-              var inputWidgets = <Widget>[
-                Cell(),
-                Cell(),
-                Cell(),
-                Cell(),
-              ];
-              listOfWidgets.addAll(inputWidgets);
-              return listOfWidgets;
-            }()),
+          Container(
+            width: screenWidth,
+            alignment: Alignment.topCenter,
+            child: Column(
+              children: (() {
+                var scheme = <Widget>[];
+                testScheme.forEach((rowNumbers) {
+                  scheme.add(Row(
+                    children: (() {
+                      var lineWidgets = <Widget>[];
+                      rowNumbers.forEach((line) {
+                        lineWidgets.addAll(List<Widget>.filled(line.length, line.show ? Cell() : const EmptyCell()));
+                      });
+                      return lineWidgets;
+                    } ())
+                  ));
+                });
+
+                return scheme;
+              }()),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

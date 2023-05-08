@@ -135,3 +135,15 @@ class _CellState extends State<Cell> {
         });
   }
 }
+
+class EmptyCell extends StatelessWidget {
+  const EmptyCell({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MySize.cardWidth,
+      height: MySize.cardHeight,
+    );
+  }
+}
